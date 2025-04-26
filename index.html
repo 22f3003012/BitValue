@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BitValue - Bitcoin Calculator</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4b0bff;
-            --primary-light: #68b2ff;
-            --accent-color: #ff6b6b;
-            --text-color: #333333;
-            --bg-color: #f8f9fa;
+            --primary-color: #ff7e00;
+            --primary-light: #ffb85c;
+            --accent-color: #1b78de;
+            --text-color: #2c3e50;
+            --bg-color: #f0f4f8;
             --card-bg: #ffffff;
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px;
+            --button-radius: 30px;
             --transition: all 0.3s ease;
-            --footer-bg: #f5f5f5;
-            --footer-color: #9f0707;
-            --success-bg: #e3f9e5;
-            --success-color: #198754;
+            --footer-bg: #e6edf3;
+            --footer-color: #2c3e50;
+            --success-bg: #e7f7f2;
+            --success-color: #10b981;
             --warning-bg: #fff3cd;
             --warning-color: #856404;
             --error-bg: #f8d7da;
@@ -28,15 +29,15 @@
         }
 
         .dark-mode {
-            --primary-color: #7c4dff;
-            --primary-light: #90caf9;
-            --accent-color: #ff7597;
+            --primary-color: #ff7e00;
+            --primary-light: #ffb85c;
+            --accent-color: #3f9fff;
             --text-color: #e0e0e0;
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
+            --bg-color: #121a24;
+            --card-bg: #1e2734;
             --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --footer-bg: #1a1a1a;
-            --footer-color: #ff6b6b;
+            --footer-bg: #15202b;
+            --footer-color: #e0e0e0;
             --success-bg: #064e3b;
             --success-color: #10b981;
             --warning-bg: #422006;
@@ -52,7 +53,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: var(--transition);
@@ -60,12 +61,15 @@
             display: flex;
             flex-direction: column;
             line-height: 1.6;
+            background-image: radial-gradient(circle at 100% 100%, rgba(255, 126, 0, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 0% 0%, rgba(27, 120, 222, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
         }
 
         .container {
             width: 100%;
             max-width: 1000px;
-            margin: 40px auto 10px; /* Reduced bottom margin from 40px to 10px */
+            margin: 40px auto 10px;
             padding: 0 20px;
             flex: 1;
         }
@@ -76,7 +80,19 @@
             box-shadow: var(--card-shadow);
             padding: 40px;
             transition: var(--transition);
-            margin-bottom: 15px; /* Reduced from 30px to 15px */
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
         }
 
         .header {
@@ -89,6 +105,22 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .gradient-text::after {
+            content: "BitValue";
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            z-index: -1;
+            background-image: linear-gradient(135deg, var(--accent-color), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: blur(4px);
+            opacity: 0.3;
         }
 
         h1 {
@@ -115,10 +147,22 @@
         .price-card {
             flex: 1;
             min-width: 200px;
-            background-color: rgba(75, 11, 255, 0.05);
+            background: linear-gradient(145deg, rgba(255, 126, 0, 0.05), rgba(27, 120, 222, 0.05));
             border-radius: var(--border-radius);
             padding: 24px;
-            border-left: 4px solid var(--primary-color);
+            border-left: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
         }
 
         .price-label {
@@ -127,6 +171,18 @@
             color: var(--text-color);
             opacity: 0.7;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .price-label::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 8px;
         }
 
         .price-value {
@@ -156,9 +212,9 @@
 
         input {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid rgba(75, 11, 255, 0.1);
-            border-radius: var(--border-radius);
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 126, 0, 0.1);
+            border-radius: var(--button-radius);
             font-size: 16px;
             background-color: var(--card-bg);
             color: var(--text-color);
@@ -168,7 +224,7 @@
         input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(75, 11, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(255, 126, 0, 0.2);
         }
 
         .button-group {
@@ -178,33 +234,57 @@
         }
 
         button {
-            padding: 14px 20px;
+            padding: 14px 24px;
             border: none;
-            background-color: var(--primary-color);
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
             color: white;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            border-radius: var(--border-radius);
+            border-radius: var(--button-radius);
             transition: var(--transition);
             flex: 1;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        button:hover::before {
+            opacity: 1;
         }
 
         button:hover {
-            background-color: #3a00e0;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(75, 11, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.2);
         }
 
         button.secondary {
-            background-color: transparent;
+            background: transparent;
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
         }
 
         button.secondary:hover {
-            background-color: rgba(75, 11, 255, 0.05);
+            background-color: rgba(255, 126, 0, 0.05);
             box-shadow: none;
+            color: var(--primary-color);
+        }
+
+        button.secondary::before {
+            display: none;
         }
 
         .results {
@@ -215,6 +295,20 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-light), transparent 60%);
+            border-bottom-left-radius: 100%;
+            opacity: 0.3;
         }
 
         .result-title {
@@ -228,8 +322,25 @@
             justify-content: space-between;
             align-items: center;
             padding: 16px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
             border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .result-item:hover {
+            transform: translateX(5px);
+        }
+
+        .result-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
         }
 
         .currency {
@@ -258,13 +369,14 @@
             align-items: center;
             cursor: pointer;
             padding: 10px 16px;
-            border-radius: 20px;
-            background-color: rgba(75, 11, 255, 0.1);
+            border-radius: var(--button-radius);
+            background-color: rgba(255, 126, 0, 0.1);
             transition: var(--transition);
         }
 
         .theme-toggle:hover {
-            background-color: rgba(75, 11, 255, 0.2);
+            background-color: rgba(255, 126, 0, 0.2);
+            transform: translateY(-2px);
         }
 
         .theme-toggle span {
@@ -288,7 +400,7 @@
             display: inline-block;
             width: 24px;
             height: 24px;
-            border: 3px solid rgba(75, 11, 255, 0.3);
+            border: 3px solid rgba(255, 126, 0, 0.3);
             border-radius: 50%;
             border-top-color: var(--primary-color);
             animation: spin 1s ease-in-out infinite;
@@ -314,21 +426,66 @@
 
         footer {
             text-align: center;
-            padding: 15px; /* Reduced from 24px to 15px */
+            padding: 15px;
             background-color: var(--footer-bg);
             color: var(--footer-color);
-            margin-top: 0; /* Changed from auto to 0 */
+            margin-top: 0;
             transition: var(--transition);
         }
 
         footer a {
             color: var(--primary-color);
             text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* Bitcoin icon animation in header */
+        .bitcoin-icon {
+            display: inline-block;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .bitcoin-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--primary-color);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         @media (max-width: 768px) {
             .container {
-                margin: 20px auto 5px; /* Reduced bottom margin */
+                margin: 20px auto 5px;
             }
 
             .card {
@@ -353,6 +510,11 @@
     <div class="container">
         <div class="card">
             <div class="header">
+                <div class="bitcoin-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-141.7-35.3c4.9-32.5-20.2-50-54.3-61.7l11.1-44.7-27.1-6.8-10.8 43.6c-7.1-1.8-14.4-3.4-21.7-5.1l10.9-43.9-27.1-6.8-11.1 44.7c-5.9-1.3-11.7-2.7-17.2-4.1l0-0.1-37.4-9.3-7.2 29.1c0 0 20.2 4.6 19.8 4.9-11 2.7-13 10-12.7 15.8l12.7 50.9c0.8 0.2 1.7 0.4 2.8 0.8-0.9-0.2-1.8-0.4-2.8-0.7l17.8 71.3c0.4 3.3-0.6 8.4-6.8 10.3 0.4 0.3-19.8-4.9-19.8-4.9l-13.5 31.2 35.2 8.8c6.6 1.6 13 3.3 19.3 5l-11.2 45.1 27.1 6.8 11.1-44.7c7.4 2 14.6 3.9 21.6 5.6l-11.1 44.5 27.1 6.8 11.2-45c46.1 8.7 80.7 5.2 95.3-36.6 11.8-33.7-0.6-53.2-24.9-65.8 17.7-4.1 31.1-15.7 34.8-39.7zm-62 91.2c-8.4 33.7-65.1 15.5-83.4 10.9l14.9-59.6c18.3 4.6 77 13.7 68.5 48.7zm8.4-87.6c-7.6 30.6-54.9 15.1-70.2 11.3l13.5-54.1c15.3 3.8 64.4 11 56.8 42.9z"/>
+                    </svg>
+                </div>
                 <h1 class="gradient-text">BitValue</h1>
                 <h2>Your Bitcoin Value Calculator</h2>
             </div>
